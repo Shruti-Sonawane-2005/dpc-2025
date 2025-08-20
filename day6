@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<pair<int,int>> findSubarrays(const vector<int>& arr) {
+    unordered_map<int, vector<int>> sumIndices;  
+    vector<pair<int,int>> result;
+    int sum = 0;
+
+    for (int i = 0; i < arr.size(); ++i) {
+        sum += arr[i];
+
+    
+        if (sum == 0) {
+            result.emplace_back(0, i);
+        
+        if (sumIndices.count(sum)) {
+            for (int startIdx : sumIndices[sum]) {
+                result.emplace_back(startIdx + 1, i);
+            }
+        }
+
+        
+        sumIndices[sum].push_back(i);
+    }
+
+    return result;
+}
+
+int main() {
+    vector<int> arr = {1, 2, 3, 3, -1, 2};
+
+    auto zeroSubarrays = findSubarrays(arr);
+
+    if (zeroSubarrays.empty()) {
+        cout << "No zero-sum subarrays found.\n";
+    } else {
+        cout << "Zero-sum subarrays (start, end):\n";
+        for (const auto& [start, end] : zeroSubarrays) {
+            cout << "(" << start << ", " << end << ")\n";
+        }
+    }
+
+    return 0;
+}
